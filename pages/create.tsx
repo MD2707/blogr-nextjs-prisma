@@ -1,30 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
 import Router from 'next/router';
 
 const Draft: React.FC = () => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const submitData = async (e: React.SyntheticEvent) => {
         e.preventDefault();
         try {
+            setIsSubmitting(true);
             const body = { title, content };
             await fetch('/api/post', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body),
             });
-            await Router.push('/drafts');
+            await Router.push('/');
         } catch (error) {
             console.error(error);
         }
     };
+
     return (
     <Layout>
         <div>
         <form onSubmit={submitData}>
-            <h1>New Draft</h1>
+            <h1>Publish</h1>
             <input
                 autoFocus
                 onChange={(e) => setTitle(e.target.value)}
@@ -39,7 +42,7 @@ const Draft: React.FC = () => {
                 rows={8}
                 value={content}
             />
-            <input disabled={!content || !title} type="submit" value="Create" />
+            <input disabled={!content || !title || isSubmitting} type="submit" value="Create" />
             <a className="back" href="#" onClick={() => Router.push('/')}>
                 or Cancel
             </a>

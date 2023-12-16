@@ -2,6 +2,7 @@ import React from "react"
 import { GetStaticProps } from "next"
 import Layout from "../components/Layout"
 import Post, { PostProps } from "../components/Post"
+import { useSession, getSession } from 'next-auth/react';
 import prisma from '../lib/prisma';
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -24,6 +25,17 @@ type Props = {
 }
 
 const Blog: React.FC<Props> = (props) => {
+  const { data: session } = useSession();
+
+    if (!session) {
+        return (
+            <Layout>
+                <h1>Feed</h1>
+                <div>You need to be authenticated to view this page.</div>
+            </Layout>
+        );
+    }
+
   return (
     <Layout>
       <div className="page">

@@ -30,6 +30,14 @@ model Post {
   reactions Reaction[]
 }
 
+model Message {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  text      String
+  createdAt DateTime  @default(now())
+}
+
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -40,6 +48,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   reactions     Reaction[]
+  messages      Message[] // Relation vers les messages créés par cet utilisateur
 }
 
 model Account {

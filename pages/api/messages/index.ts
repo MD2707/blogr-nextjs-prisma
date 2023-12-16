@@ -2,24 +2,27 @@
 import prisma from '../../../lib/prisma';
 import { getServerSession } from "next-auth/next" // <--- imported getServerSession from "next-auth/next"
 import { options as authOptions } from "../auth/[...nextauth]" // <--- imported authOptions
-import getUserByEmail from '../utils';
 
 export default async function handler(req, res) {
-  const { postId, content } = req.body;
   const session = await getServerSession(req, res, authOptions); // <--- used the getServerSession instead
-  const user = await getUserByEmail(req, res);
-
   try {
-    const reaction = await prisma.reaction.create({
-      data: {
-        content,
-        postId,
-        userId: user?.id,
+    const messages = await prisma.message.findMany({
+      take: 20,
+      orderBy: {
+        createdAt: 'asc',
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+          },
+        },
       },
     });
-    res.status(200).json(reaction);
+
+    return res.status(200).json({ messages });
   } catch (error) {
-    console.error('Erreur lors de la création de la réaction', error);
-    res.status(500).json({ error: 'Erreur lors de la création de la réaction' });
+    console.error('Error fetching messages', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 }

@@ -124,8 +124,8 @@ const Header: React.FC = () => {
         <Link href="/rank">
           <a data-active={isActive('/rank')}>Ranking</a>
         </Link>
-        <Link href="/drafts">
-          <a data-active={isActive('/drafts')}>My drafts</a>
+        <Link href="/chat">
+          <a data-active={isActive('/chat')}>Discussion</a>
         </Link>
         <style jsx>{`
           .bold {
