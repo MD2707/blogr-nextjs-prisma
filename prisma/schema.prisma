@@ -10,6 +10,16 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
+model Reaction {
+  id       String @id @default(cuid())
+  content  String
+  postId   String 
+  userId   String
+  post     Post   @relation(fields: [postId], references: [id])
+  user     User   @relation(fields: [userId], references: [id])
+}
+
+
 model Post {
   id        String   @id @default(cuid())
   title     String
@@ -17,6 +27,19 @@ model Post {
   published Boolean  @default(false)
   author    User?    @relation(fields: [authorId], references: [id])
   authorId  String?
+  reactions Reaction[]
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  posts         Post[]
+  accounts      Account[]
+  sessions      Session[]
+  reactions     Reaction[]
 }
 
 model Account {
@@ -48,16 +71,6 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  posts         Post[]
-  accounts      Account[]
-  sessions      Session[]
-}
 
 model VerificationToken {
   id         Int      @id @default(autoincrement())
