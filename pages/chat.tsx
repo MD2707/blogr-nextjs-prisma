@@ -81,26 +81,12 @@ const Chat: React.FC = () => {
         </form>
         <main>
           {messages.map((message) => (
-            <div key={message.id} className="message">
+            <div key={message.id} className="message bg-yellow-500">
             <p>{message.user.name} {message.createdAt} : {message.text}</p>
             </div>
           ))}
         </main>
       </div>
-      <style jsx>{`
-        .message {
-          background: white;
-          transition: box-shadow 0.1s ease-in;
-        }
-
-        .message:hover {
-          box-shadow: 1px 1px 3px #aaa;
-        }
-
-        .message + .message {
-          margin-top: 2rem;
-        }
-      `}</style>
     </Layout>
   );
 };

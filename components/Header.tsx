@@ -45,7 +45,7 @@ const Header: React.FC = () => {
     left = (
       <div className="left">
         <Link href="/">
-          <a className="bold" data-active={isActive('/')}>
+          <a className="bold " data-active={isActive('/')}>
             Feed
           </a>
         </Link>
@@ -209,6 +209,7 @@ const Header: React.FC = () => {
         }
       `}</style>
     </nav>
+    
   );
 };
 
