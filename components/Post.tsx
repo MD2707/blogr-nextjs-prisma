@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Router from "next/router";
 import ReactMarkdown from "react-markdown";
+import Image from "next/image";
 
 export type PostProps = {
   id: string;
@@ -8,6 +9,7 @@ export type PostProps = {
   author: {
     name: string;
     email: string;
+    image : string;
   } | null;
   content: string;
   published: boolean;
@@ -59,10 +61,14 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
   return (
     <div className="bg-white border rounded-sm max-w-md shadow-md m-10">
       <div className="flex items-center m-5">
-        <img className="h-12 w-12 rounded-full" src="https://picsum.photos/id/1027/150/150"/>
+        <Image 
+          className="h-12 w-12 rounded-full" 
+          src={post?.author?.image}
+          width={50}
+          height={50}/>
         <div className="ml-3 ">
           <span className="text-sm font-semibold antialiased block leading-tight">{post.title}</span>
-          <span className="text-gray-600 text-xs block">By {authorName}</span>
+          <span className="text-gray-600 text-xs block">Par {authorName}</span>
         </div>
       </div>
       <div className="px-4 max-h-80 overflow-y-scroll" onClick={() => Router.push("/p/[id]", `/p/${post.id}`)} >

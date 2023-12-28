@@ -9,12 +9,13 @@ export default async function handler(req, res) {
     const messages = await prisma.message.findMany({
       take: 20,
       orderBy: {
-        createdAt: 'asc',
+        createdAt: 'desc',
       },
       include: {
         user: {
           select: {
             name: true,
+            image: true,
           },
         },
       },

@@ -10,7 +10,7 @@ export const getStaticProps: GetStaticProps = async () => {
     where: { published: true },
     include: {
       author: {
-        select: { name: true },
+        select: { name: true, image: true },
       },
     },
   });
@@ -38,8 +38,10 @@ const Blog: React.FC<Props> = (props) => {
 
   return (
     <Layout>
-      <div className="page">
-        <h1>Public Feed</h1>
+      <div className="page flex flex-col items-center">
+        <h1 className="text-3xl font-bold ">
+          Fil d'actualité
+        </h1>
         <main>
           {props.feed.map((post) => (
             <div key={post.id} className="post">

@@ -4,6 +4,8 @@ import { useSession, getSession } from 'next-auth/react';
 import Layout from '../components/Layout';
 import Ranking from '../components/Ranking'; // Importez le composant Ranking
 import prisma from '../lib/prisma';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     const session = await getSession({ req });
@@ -27,6 +29,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
         select: {
             id: true,
             name: true,
+            image: true,
         },
     });
 
@@ -36,6 +39,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
         return {
             userId: user.id,
             userName: user.name,
+            userImage: user.image,
             numberOfPublishedPosts,
         };
     });
@@ -48,7 +52,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 };
 
 type Props = {
-    userPostCounts: { userId: number; userName: string; numberOfPublishedPosts: number }[];
+    userPostCounts: { userId: number; userName: string; userImage: string; numberOfPublishedPosts: number }[];
 };
 
 const Rank: React.FC<Props> = ({ userPostCounts }) => {
@@ -65,13 +69,30 @@ const Rank: React.FC<Props> = ({ userPostCounts }) => {
 
     return (
         <Layout>
-            <div className="page">
-                <h1>Ranking</h1>
-                <Ranking userPostCounts={userPostCounts} />
+            <div className="ranking-page flex flex-col items-center">
+                <div className="ranking-content flex flex-col items-center w-6/12">
+                    <div className="ranking-header self-center">
+                        <Image
+                            className=''
+                            src="/images/icon/rank.png"
+                            alt="Rank medal"
+                            width={300}
+                            height={300}
+                        />
+                        <h1 className='text-2xl font-bold text-gray-800'>
+                            Classement des copains !
+                        </h1>
+                    </div>
+                    <div className="ranking-list mt-5 w-full">
+                        {userPostCounts.map((user, i) => (
+                            <Ranking key={user.userId} user={user} rank={i+1}/>
+                        ))}
+                    </div>
+                </div>
+                <p className='text-gray-500 mt-10'>
+                <Link href="/create">Tu n'apparais pas dans le classement ? Créer ton premier post ici !</Link>
+                </p>
             </div>
-            <style jsx>{`
-                /* Ajoutez vos styles ici */
-            `}</style>
         </Layout>
     );
 };

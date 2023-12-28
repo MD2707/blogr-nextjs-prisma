@@ -18,6 +18,7 @@ export default async function handler(req, res) {
         user: {
           select: {
             name: true,
+            image: true,
           },
         },
       },
